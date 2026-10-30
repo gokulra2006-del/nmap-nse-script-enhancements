@@ -32,7 +32,7 @@ Official source: https://github.com/nmap/nmap/blob/master/scripts/http-headers.n
 | File | Purpose |
 | --- | --- |
 | `ftp/base/banner.nse` | Official Nmap reference script for initial TCP banner collection. |
-| `ftp/enhanced/ftp-greeting-observation.nse` | Student proposal that safely collects and sanitizes one unauthenticated FTP/FTPS greeting. It does not authenticate or send FTP commands. |
+| `ftp/enhanced/ftp-greeting-observation.nse` | Original safe observation script. It records a normalized FTP/implicit-FTPS greeting and makes one unauthenticated `FEAT` request to list capabilities that the server explicitly advertises. |
 
 Official source: https://github.com/nmap/nmap/blob/master/scripts/banner.nse
 
@@ -40,7 +40,8 @@ Official source: https://github.com/nmap/nmap/blob/master/scripts/banner.nse
 
 Both enhanced scripts completed a basic Nmap load check with Nmap 7.99 on
 localhost. This validates parsing and loading only; it is not an upstream Nmap
-review or acceptance decision.
+review or acceptance decision. See [TESTING.md](TESTING.md) for the repeatable
+test cases required before proposing the FTP script upstream.
 
 ## Responsible use
 
