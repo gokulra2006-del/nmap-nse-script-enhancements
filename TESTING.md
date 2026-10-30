@@ -7,7 +7,40 @@ confirms that Nmap can parse and load the scripts.
 
 ```text
 nmap --script ./ftp/enhanced/ftp-greeting-observation.nse -p 1 127.0.0.1
+nmap --script ./http/enhanced/http-security-observation.nse -p 1 127.0.0.1
 ```
+
+## HTTP modern-policy observation check
+
+Test the HTTP script only against a web service that you own or are authorised
+to assess:
+
+```text
+nmap -p 80,443 --script ./http/enhanced/http-security-observation.nse <test-host>
+```
+
+For a specific path, provide the path argument. To force a GET request when a
+test service handles HEAD differently, set `useget` to `true`:
+
+```text
+nmap -p 443 --script ./http/enhanced/http-security-observation.nse \
+  --script-args http-security-observation.path=/,http-security-observation.useget=true \
+  <test-host>
+```
+
+Use the fixture in `tests/fixtures/modern-policy-headers.txt` as the expected
+header set for a controlled test service. A successful result should report
+the modern-policy headers as `present` and retain the observation-only wording.
+Missing headers are reported as `not observed`; they are not vulnerability
+findings.
+
+## HTTP evidence checklist
+
+- Save one authorised HTTP result and one authorised HTTPS result.
+- Confirm that a server accepting HEAD reports `request: HEAD`.
+- Confirm that `useget=true` reports `request: GET`.
+- Confirm that no credentials, forms, crawling, or `Origin` header are used.
+- Do not publish private hostnames, tokens, cookies, or sensitive header values.
 
 ## FTP capability-observation check
 
@@ -43,3 +76,5 @@ hostnames, or sensitive banners.
 - Test output is collected for FTP, a server without `FEAT`, and implicit FTPS.
 - A proposed Nmap pull request explains how this capability inventory differs
   from the existing general-purpose `banner.nse` script.
+- A proposed HTTP pull request explains that the script focuses on modern
+  browser-isolation, permissions, reporting, and policy-reporting headers.
